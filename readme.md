@@ -32,6 +32,9 @@ A Python application that validates medical prescriptions using Google Cloud's D
   - Document AI API
   - Vertex AI API
 - Required Python packages (see `requirements.txt`)
+- Example prescription images for classifier training:
+  - Handwritten prescriptions in `manuscritas/` directory
+  - Printed prescriptions in `digitadas/` directory
 
 ## Setup
 
@@ -46,13 +49,28 @@ cd medical-prescription-validator
 pip install -r requirements.txt
 ```
 
-3. Configure your Google Cloud credentials:
+3. Configure Google Cloud authentication (choose one method):
+
+   **Option 1 - Using gcloud CLI (Recommended):**
+   ```bash
+   # Install gcloud CLI if not already installed
+   # Login with your Google account
+   gcloud auth login
+
+   # Set your project
+   gcloud config set project your-project-id
+
+   # Create application default credentials
+   gcloud auth application-default login
+   ```
+
+   **Option 2 - Using service account key:**
    - Create or use an existing Google Cloud project
    - Set up authentication by creating a service account and downloading the JSON key file
    - Set the environment variable:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS="path/to/your/service-account-key.json"
-```
+   ```bash
+   export GOOGLE_APPLICATION_CREDENTIALS="path/to/your/service-account-key.json"
+   ```
 
 4. Update the configuration in `config.py`:
 ```python
@@ -62,7 +80,20 @@ MODEL_NAME = "gemini-2.0-flash-exp"
 DOCUMENT_AI_PROCESSOR_ID = "your-processor-id"
 ```
 
-Note: The example images used in the classifier (`manuscritas/` and `digitadas/` directories) should be replaced with your own sample images. The current examples are public domain images used for demonstration purposes only.
+5. Add example images for the classifier:
+   - Create two directories in your project root:
+     ```bash
+     mkdir manuscritas digitadas
+     ```
+   - Add example prescription images:
+     - `manuscritas/`: Place handwritten prescription images here
+     - `digitadas/`: Place typed/printed prescription images here
+   - Minimum recommended examples per category: 2-3 images at least
+   - Supported formats: JPG, PNG
+   - Images should be clear and representative of real prescriptions
+   - Each image should clearly show the prescription content
+
+Note: The classifier requires example images to work properly. Without these examples in the respective directories, the classification functionality will not work correctly.
 
 ## Usage
 
